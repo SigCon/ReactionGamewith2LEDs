@@ -40,12 +40,16 @@ print printdate(6)
 GPIO.setmode(GPIO.BOARD)
 
 # Choose which GPIO pins to use
-led = 23
+TimeLED = 23
 rightButton = 3
 leftButton = 5
+leftGreenLED = 19
+rightGreenLED = 21
 
 # Set the buttons as input and the LED as an output
-GPIO.setup(led, GPIO.OUT)
+GPIO.setup(TimeLED, GPIO.OUT)
+GPIO.setup(leftGreenLED, GPIO.OUT)
+GPIO.setup(rightGreenLED, GPIO.OUT)
 GPIO.setup(rightButton, GPIO.IN)
 GPIO.setup(leftButton, GPIO.IN)
 
@@ -64,7 +68,9 @@ for game in range(0, games):
     # Turn the LED on
     printline(6)
     print 'Game ' + str(game +1) + ' out of ' + str(games)
-    GPIO.output(led, 1)
+    GPIO.output(TimeLED, 1)
+    GPIO.output(leftGreenLED, 1)
+    GPIO.output(rightGreenLED, 1)
 
     # Generate a random time the led will be on
     randnumber = int(random.uniform(1, 5))
@@ -90,7 +96,7 @@ for game in range(0, games):
         wingame(0)
     else:
         # Turn the led off
-        GPIO.output(led, 0)
+        GPIO.output(TimeLED, 0)
         # Wait until a button has been pressed
         while GPIO.input(leftButton) and GPIO.input(rightButton):
             pass # Do nothing!
