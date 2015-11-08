@@ -10,9 +10,15 @@ names = []
 
 # Say who won
 def wingame(player):
-    """The function wingame accepts the player who won as the only parameter"""
+    """The function wingame accepts the player who won as the only parameter
+    player = index number of array names, 0 = left player, 1 = right player, based on order of input with raw_input
+    """
     print names[player] + ' won!'
     scores[player] += 1
+    # if player == 0:
+    #    GPIO.output(leftGreenLED, 1)
+    # else:
+    #     GPIO.output(rightGreenLED, 1)
 
 def printline(repetition):
     output = '---' * repetition
@@ -37,6 +43,7 @@ def printscore():
 print printdate(6)
 
 # Make sure the GPIO pins are ready
+GPIO.cleanup()
 GPIO.setmode(GPIO.BOARD)
 
 # Choose which GPIO pins to use
@@ -56,21 +63,21 @@ GPIO.setup(leftButton, GPIO.IN)
 # Find out the names of the players
 leftPlayerName = raw_input("What is the left player's name? ")
 rightPlayerName = raw_input("What is the right player's name? ")
-games = int(raw_input("How many games do you want to play? "))
+numberOfGames = int(raw_input("How many games do you want to play? "))
 printline(10)
 
 # Put the names in a list
 names = [leftPlayerName, rightPlayerName]
 
-
 # Play all the games
-for game in range(0, games):
-    # Turn the LED on
+for game in range(0, numberOfGames):
+    # make sure the green LEDs are off
+    GPIO.output(leftGreenLED, 0)
+    GPIO.output(rightGreenLED, 0)
     printline(6)
-    print 'Game ' + str(game +1) + ' out of ' + str(games)
+    print 'Game ' + str(game +1) + ' out of ' + str(numberOfGames)
+    # Turn the TimeLED on
     GPIO.output(TimeLED, 1)
-    GPIO.output(leftGreenLED, 1)
-    GPIO.output(rightGreenLED, 1)
 
     # Generate a random time the led will be on
     randnumber = int(random.uniform(1, 5))
@@ -98,8 +105,8 @@ for game in range(0, games):
         # Turn the led off
         GPIO.output(TimeLED, 0)
         # Wait until a button has been pressed
-        while GPIO.input(leftButton) and GPIO.input(rightButton):
-            pass # Do nothing!
+        # while GPIO.input(leftButton) and GPIO.input(rightButton):
+        #      pass # Do nothing!
         # See if the left button has been pressed
         if GPIO.input(leftButton) == False:
             wingame(0)
@@ -109,5 +116,11 @@ for game in range(0, games):
 
 printscore()
 
-# Cleanup
-GPIO.cleanup()
+# answerEndGame = raw_input("Do you want to end the game? (y/n) ")
+# if answerEndGame == "y":
+    # Cleanup
+#    GPIO.cleanup()
+# else:
+#     pass
+
+
